@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir> <env-dir>
+
+# Fail immediately on non-zero exit code.
+set -e
+
+export_env_as_react_app_env() {
+  env_dir=$1
+  whitelist_key="HEROKU_TO_REACT_APP_VARIABLES"
+  whitelist_regex=${2:-'^HEROKU_'}
+  blacklist_regex=${3:-'^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH)$'}
+  if [ -d "$env_dir" ]; then
+    whitelist_variables=$(cat $env_dir/whitelist_key)
+    for e in $(ls $env_dir); do
+      echo "$e" | grep -E "$whitelist_regex" &&
+      echo "$whitelist_variables" | grep -E "$e" &&
+      echo "$e variable went through and will be set as $env_dir/REACT_APP_$e"
+      "$(cat $env_dir/$e)" > "$env_dir/REACT_APP_$e"
+      :
+    done
+  fi
+}
+
+export_env_as_react_app_env "$ENV_DIR"
