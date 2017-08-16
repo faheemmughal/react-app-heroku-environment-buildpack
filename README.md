@@ -1,4 +1,4 @@
-# react-app-heroku-environemnt-buildpack
+# react-app-heroku-environment-buildpack
 
 Build pack to let heroku environment variables through as react app variables
 
