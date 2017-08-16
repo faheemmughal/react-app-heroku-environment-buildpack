@@ -10,21 +10,21 @@ export_env_as_react_app_env() {
   env_dir=$1
   whitelist_key="HEROKU_TO_REACT_APP_VARIABLES"
   whitelist_regex=${2:-'^HEROKU_'}
-  echo "env directory is $env_dir"
+  # echo "env directory is $env_dir"
   if [ -d "$env_dir" ]; then
-    echo "env directory was present"
+    # echo "env directory was present"
     whitelist_variables=$(cat $env_dir/$whitelist_key)
     for e in $(ls $env_dir); do
-      echo "testing variable $e"
+      # echo "testing variable $e"
       echo "$e" | grep -E "$whitelist_regex" &&
       echo "$whitelist_variables" | grep -E "$e" &&
-      echo "$e variable went through and will be set as $env_dir/REACT_APP_$e" &&
+      echo "$e variable has been accepted and will be set as REACT_APP_$e" &&
       $(cat $env_dir/$e > "$env_dir/REACT_APP_$e")
       :
     done
   fi
 }
 
-echo "hi!"
+# echo "Buildpack start!"
 export_env_as_react_app_env "$ENV_DIR"
-echo "bye!"
+# echo "Buildpack exit!"
